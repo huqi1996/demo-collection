@@ -188,36 +188,5 @@ public class MainStream {
         System.out.println(IntStream.rangeClosed(2, 20).boxed().collect(Collectors.partitioningBy(candidate ->
                 IntStream.rangeClosed(2, (int) Math.sqrt(candidate)).anyMatch(t -> candidate % t == 0)
         )));
-
-
-        /*IntStream.range(0, 10).forEach(i ->
-                new Thread(() ->
-                {
-                    System.out.println("******");
-                    throw new NullPointerException();
-                }).start());
-
-        IntStream.range(0, 10).parallel().forEach(i -> {
-            try {
-                throw new NullPointerException();
-            } catch (Exception e) {
-                System.out.println("catch************** : " + i);
-            }
-        });
-
-        IntStream.range(0, 10).parallel().forEach(i -> {
-            System.out.println(i);
-            throw new ArrayIndexOutOfBoundsException();
-        });*/
-
-        new Thread(() -> {
-            throw new RuntimeException("xxx");
-        }).start();
-
-        try {
-            Thread.sleep(2000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
     }
 }

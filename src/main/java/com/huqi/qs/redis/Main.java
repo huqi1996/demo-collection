@@ -4,6 +4,9 @@ import redis.clients.jedis.Jedis;
 
 import java.util.*;
 
+/**
+ * @author huqi
+ */
 public class Main {
     public static void main(String[] args) {
         //连接本地的 Redis 服务
@@ -33,11 +36,5 @@ public class Main {
         for (String key : keys) {
             System.out.println(key);
         }
-
-        Map<String, String> resultMap = new HashMap<>();
-        resultMap.put("1", "1");
-        System.out.println(resultMap.get("1") + "---");
-        resultMap.remove("2");
-        System.out.println(resultMap.get("1") + "---");
     }
 }
