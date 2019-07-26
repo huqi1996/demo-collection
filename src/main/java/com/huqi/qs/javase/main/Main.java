@@ -5,6 +5,10 @@ import com.huqi.qs.javase.util.ListUtil;
 import org.apache.commons.collections4.ListUtils;
 import org.apache.commons.lang3.StringUtils;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -15,9 +19,10 @@ import java.util.List;
 public class Main {
 
     public static void main(String[] args) {
-        demo20190212();
-        demo20190325();
-        demo20190523();
+//        demo20190212();
+//        demo20190325();
+//        demo20190523();
+        demoLocalDateTime();
     }
 
     public static void demo20190212() {
@@ -89,5 +94,21 @@ public class Main {
 
         Collections.sort(people);
         System.out.println(people);
+    }
+
+    public static void demoLocalDateTime() {
+        LocalDateTime todayStart = LocalDateTime.of(LocalDate.now(), LocalTime.MIN);
+        System.out.println(todayStart);
+        System.out.println(todayStart.atZone(ZoneId.systemDefault()).toInstant().toEpochMilli());
+        System.out.println(LocalDateTime.now().atZone(ZoneId.systemDefault()).toInstant().toEpochMilli());
+        System.out.println(System.currentTimeMillis());
+        LocalDateTime todayEnd = LocalDateTime.of(LocalDate.now(), LocalTime.MAX);
+        System.out.println(todayEnd);
+        System.out.println(todayEnd.atZone(ZoneId.systemDefault()).toInstant().toEpochMilli());
+        System.out.println(todayEnd.atZone(ZoneId.systemDefault()).toInstant().toEpochMilli()
+                - todayStart.atZone(ZoneId.systemDefault()).toInstant().toEpochMilli());
+        System.out.println(3600 * 24 * 1000);
+        System.out.println(LocalDateTime.of(2100, 1, 1, 1, 1));
+        System.out.println(LocalDateTime.of(2100, 1, 1, 1, 1).atZone(ZoneId.systemDefault()).toInstant().toEpochMilli());
     }
 }
