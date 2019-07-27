@@ -9,11 +9,11 @@ import java.util.List;
 /**
  * @author huqi 20190227
  */
-public class Main {
+public class MainJSON {
     public static void main(String[] args) {
         System.out.println(JSON.toJSONString(null));
         System.out.println(JSON.toJSONString(null).length() + "   " + "".length());
-        System.out.println(Main.class.getSimpleName());
+        System.out.println(MainJSON.class.getSimpleName());
 
         try {
             System.out.println(Double.parseDouble(null));

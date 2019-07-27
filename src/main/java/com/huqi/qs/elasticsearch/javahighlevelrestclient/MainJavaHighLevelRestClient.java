@@ -15,7 +15,7 @@ import java.util.Map;
 /**
  * @author huqi
  */
-public class Main {
+public class MainJavaHighLevelRestClient {
     public static void main(String[] args) {
         RestHighLevelClient client = new RestHighLevelClient(
                 RestClient.builder(new HttpHost("localhost", 9200, "http")).build());

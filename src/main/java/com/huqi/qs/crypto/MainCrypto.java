@@ -11,7 +11,7 @@ import java.security.InvalidParameterException;
 import java.security.NoSuchAlgorithmException;
 import java.util.*;
 
-public class Main {
+public class MainCrypto {
     public static String computeSignature(Map<String, String> params, String secretKey) {
         assert (params != null);
         assert (secretKey != null);

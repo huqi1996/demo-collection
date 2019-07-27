@@ -16,7 +16,7 @@ import java.util.List;
 /**
  * @author huqi
  */
-public class Main {
+public class MainSE {
 
     public static void main(String[] args) {
 //        demo20190212();

@@ -5,7 +5,7 @@ import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 import java.util.Properties;
 
-public class Main {
+public class MainMail {
     public static void main(String[] args) {
         String from = "2715612836@qq.com";
         String to = "2827507048@qq.com";
