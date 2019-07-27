@@ -8,11 +8,6 @@
     <artifactId>demo-collection</artifactId>
     <packaging>pom</packaging>
     <version>1.0-SNAPSHOT</version>
-    <modules>
-        <module>codewars</module>
-        <module>java-high-level-rest-client</module>
-        <module>code-wars</module>
-    </modules>
 
     <dependencies>
         <dependency>
