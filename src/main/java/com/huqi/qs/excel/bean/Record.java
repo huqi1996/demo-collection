@@ -32,41 +32,44 @@ public class Record {
 
     public void printRecord() {
         printTitle();
-        System.out.println(//(this.getProfit() > 0 ? formatString("***") : formatPrint(this.getAmount())) + "\t" +
-                formatPrint(this.getAmount()) + "\t" +
-                        //(this.getProfit() > 0 ? formatString("***") : formatPrint(this.getProfit() - this.getCharge())) + "\t" +
-                        formatPrint(this.getProfit() - this.getCharge()) + "\t" +
-                        //(this.getProfit() > 0 ? formatString("***") : formatPrint(this.getProfit())) + "\t" +
-                        formatPrint(this.getProfit()) + "\t" +
-                        formatPrint(this.getCharge()) + "\t" +
-                        formatPrint(this.getCharge() - ((this.getAmount() + this.getProfit()) / 2 * 0.001)) + "\t" +
-                        formatPrint(((this.getAmount() + this.getProfit()) / 2 * 0.001)) + "\t" +
-                        formatString(this.getStartTime()) + "\t" +
-                        formatString(this.getEndTime()));
+        System.out.println(formatString(this.getStartTime(), null) +
+                formatString(this.getEndTime(), null) +
+                //(this.getProfit() > 0 ? formatString("***", null) : formatPrint(this.getAmount())) +
+                formatPrint(this.getAmount()) +
+                //(this.getProfit() > 0 ? formatString("***", null) : formatPrint(this.getProfit())) +
+                formatPrint(this.getProfit()) +
+                //(this.getProfit() > 0 ? formatString("***", null) : formatPrint(this.getProfit() - this.getCharge())) +
+                formatPrint(this.getProfit() - this.getCharge()) +
+                formatPrint(this.getCharge()) +
+                formatPrint(this.getCharge() - ((this.getAmount() + this.getProfit()) / 2 * 0.001)) +
+                formatPrint(((this.getAmount() + this.getProfit()) / 2 * 0.001)));
     }
 
     private void printTitle() {
         if (record == null) {
             record = new Record();
-            System.out.println(formatString("cjl") + "\t"
-                    + formatString("sy") + "\t"
-                    + formatString("jycz") + "\t"
-                    + formatString("fy") + "\t"
-                    + formatString("yj") + "\t"
-                    + formatString("yhs") + "\t"
-                    + formatString("kssj") + "\t"
-                    + formatString("jssj"));
+            System.out.println(formatString("开始时间", 8)
+                    + formatString("结束时间", 8)
+                    + formatString("交易额", 6)
+                    + formatString("交易差值", 8)
+                    + formatString("净收益", 6)
+                    + formatString("费用", 4)
+                    + formatString("佣金", 4)
+                    + formatString("印花税", 6));
         }
     }
 
     private String formatPrint(double number) {
-        return formatString(String.format("%.2f", number));
+        return formatString(String.format("%.2f", number), null);
     }
 
-    private String formatString(String str) {
+    private String formatString(String str, Integer length) {
         StringBuilder builder = new StringBuilder();
         builder.append(str);
-        for (int i = 0; i < LENGTH - str.length(); i++) {
+        if (length == null) {
+            length = str.length();
+        }
+        for (int i = 0; i < LENGTH - length; i++) {
             builder.append(" ");
         }
         return builder.toString();
