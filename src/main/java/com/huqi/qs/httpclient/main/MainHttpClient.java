@@ -5,7 +5,7 @@ import com.huqi.qs.httpclient.service.*;
 /**
  * @author huqi 20190110
  */
-public class Main {
+public class MainHttpClient {
     public static void main(String[] args) {
         // HTTP GET请求
         HttpGetRequestMethodExample.httpGetRequestMethodExample();

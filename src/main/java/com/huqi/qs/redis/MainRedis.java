@@ -7,7 +7,7 @@ import java.util.*;
 /**
  * @author huqi
  */
-public class Main {
+public class MainRedis {
     public static void main(String[] args) {
         //连接本地的 Redis 服务
         Jedis jedis = new Jedis("localhost");
