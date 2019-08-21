@@ -10,8 +10,10 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import java.io.FileInputStream;
 import java.io.InputStream;
 import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
+import java.util.regex.Pattern;
 
 /**
  * @author huqi 20190604
@@ -27,8 +29,21 @@ public class MainStock {
     public static final int BONUS = 2;
     public static final String START_TIME = "2014-10-30";
     public static final String FIRST_PHASE = "2015-08-10";
-    public static final String SECOND_PHASE = "2018-01-01";
-    public static final String END_TIME = "2019-04-01";
+    public static final String SECOND_PHASE = "2017-05-16";
+    public static final String THIRD_PHASE = "2018-01-15";
+    public static final String LAST_TIME = "2019-04-01";
+
+    public static Pattern firstPattern;
+    public static Pattern secondPattern;
+    public static Pattern thirdPattern;
+    public static Pattern fourthPattern;
+
+    static {
+        firstPattern = Pattern.compile("\\d{4}-\\d{2}-\\d{2}");
+        secondPattern = Pattern.compile("\\d{4}-\\d-\\d{2}");
+        thirdPattern = Pattern.compile("\\d{4}-\\d{2}-\\d");
+        fourthPattern = Pattern.compile("\\d{4}-\\d-\\d");
+    }
 
     public static void main(String[] args) {
         try {
@@ -66,9 +81,9 @@ public class MainStock {
 
     private static void calculateCost(Map<Integer, String> dataRow) {
         try {
-            long firstDate = new SimpleDateFormat("yyyy-mm-dd").parse(FIRST_PHASE).getTime();
-            long secondDate = new SimpleDateFormat("yyyy-mm-dd").parse(SECOND_PHASE).getTime();
-            long dataRowDate = new SimpleDateFormat("yyyy-mm-dd").parse(dataRow.get(4)).getTime();
+            long firstDate = getTime(FIRST_PHASE);
+            long secondDate = getTime(THIRD_PHASE);
+            long dataRowDate = getTime(dataRow.get(4));
             int type = Integer.parseInt(dataRow.get(3));
             double a;
             if (type == BUY || type == SELL) {
@@ -104,7 +119,7 @@ public class MainStock {
     }
 
     private static void calculateFirst(List<Map<Integer, String>> data) {
-        Record record = new Record(0, 0, 0, START_TIME, END_TIME);
+        Record record = new Record(0, 0, 0, 0, 0, START_TIME, LAST_TIME);
         for (Map<Integer, String> dataRow : data) {
             calculateDataRow(dataRow, record);
         }
@@ -115,10 +130,12 @@ public class MainStock {
         int type = Integer.parseInt(dataRow.get(3));
         if (type == BUY) {
             record.setAmount(record.getAmount() + Double.parseDouble(dataRow.get(2)));
+            record.setBuyAmount(record.getBuyAmount() + Double.parseDouble(dataRow.get(2)));
             record.setProfit(record.getProfit() - Double.parseDouble(dataRow.get(2)));
             record.setCharge(record.getCharge() + Double.parseDouble(dataRow.get(5)));
         } else if (type == SELL || type == BONUS) {
             record.setAmount(record.getAmount() + Double.parseDouble(dataRow.get(2)));
+            record.setSellAmount(record.getSellAmount() + Double.parseDouble(dataRow.get(2)));
             record.setProfit(record.getProfit() + Double.parseDouble(dataRow.get(2)));
             record.setCharge(record.getCharge() + Double.parseDouble(dataRow.get(5)));
             if (type == SELL) {
@@ -131,19 +148,22 @@ public class MainStock {
 
     private static void calculateSecond(List<Map<Integer, String>> data) {
         try {
-            long firstDate = new SimpleDateFormat("yyyy-mm-dd").parse(FIRST_PHASE).getTime();
-            long secondDate = new SimpleDateFormat("yyyy-mm-dd").parse(SECOND_PHASE).getTime();
-            Record record1 = new Record(0, 0, 0, START_TIME, FIRST_PHASE);
-            Record record2 = new Record(0, 0, 0, FIRST_PHASE, SECOND_PHASE);
-            Record record3 = new Record(0, 0, 0, SECOND_PHASE, END_TIME);
+            long firstDate = getTime(FIRST_PHASE);
+            long secondDate = getTime(THIRD_PHASE);
+            Record record1 = new Record(0, 0, 0, 0, 0, START_TIME, FIRST_PHASE);
+            Record record2 = new Record(0, 0, 0, 0, 0, FIRST_PHASE, SECOND_PHASE);
+            Record record3 = new Record(0, 0, 0, 0, 0, THIRD_PHASE, LAST_TIME);
             for (Map<Integer, String> dataRow : data) {
-                long dataRowDate = new SimpleDateFormat("yyyy-mm-dd").parse(dataRow.get(4)).getTime();
+                long dataRowDate = getTime(dataRow.get(4));
                 if (dataRowDate < firstDate) {
                     calculateDataRow(dataRow, record1);
+                    System.out.println(dataRow.get(4) + "         " + dataRowDate + "    " + firstDate + "-------------------");
                 } else if (dataRowDate < secondDate) {
                     calculateDataRow(dataRow, record2);
+                    System.out.println(dataRow.get(4) + "         " + dataRowDate + "    " + firstDate + "+++++++++++++++++++");
                 } else {
                     calculateDataRow(dataRow, record3);
+                    System.out.println(dataRow.get(4) + "         " + dataRowDate + "    " + secondDate + "@@@@@@@@@@@@@@@@@@");
                 }
             }
             record1.printRecord();
@@ -152,5 +172,22 @@ public class MainStock {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    private static long getTime(String text) {
+        try {
+            if (firstPattern.matcher(text).matches()) {
+                return new SimpleDateFormat("yyyy-MM-dd").parse(text).getTime();
+            } else if (secondPattern.matcher(text).matches()) {
+                return new SimpleDateFormat("yyyy-M-dd").parse(text).getTime();
+            } else if (thirdPattern.matcher(text).matches()) {
+                return new SimpleDateFormat("yyyy-MM-d").parse(text).getTime();
+            } else {
+                return new SimpleDateFormat("yyyy-M-d").parse(text).getTime();
+            }
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return 0L;
     }
 }

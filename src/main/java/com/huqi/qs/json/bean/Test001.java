@@ -6,6 +6,7 @@ public class Test001 {
     private String key001;
     private String key002;
     private String key003;
+    private String text;
 
     @Override
     public String toString() {
@@ -34,5 +35,13 @@ public class Test001 {
 
     public void setKey003(String key003) {
         this.key003 = key003;
+    }
+
+    public String getText() {
+        return text;
+    }
+
+    public void setText(String text) {
+        this.text = text;
     }
 }

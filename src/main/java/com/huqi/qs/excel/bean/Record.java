@@ -5,6 +5,8 @@ package com.huqi.qs.excel.bean;
  */
 public class Record {
     private double amount;
+    private double buyAmount;
+    private double sellAmount;
     private double profit;
     private double charge;
     private String startTime;
@@ -17,8 +19,10 @@ public class Record {
     public Record() {
     }
 
-    public Record(double amount, double profit, double charge, String startTime, String endTime) {
+    public Record(double amount, double buyAmount, double sellAmount, double profit, double charge, String startTime, String endTime) {
         this.amount = amount;
+        this.buyAmount = buyAmount;
+        this.sellAmount = sellAmount;
         this.profit = profit;
         this.charge = charge;
         this.startTime = startTime;
@@ -36,6 +40,8 @@ public class Record {
                 formatString(this.getEndTime(), null) +
                 //(this.getProfit() > 0 ? formatString("***", null) : formatPrint(this.getAmount())) +
                 formatPrint(this.getAmount()) +
+                formatPrint(this.getBuyAmount()) +
+                formatPrint(this.getSellAmount()) +
                 //(this.getProfit() > 0 ? formatString("***", null) : formatPrint(this.getProfit())) +
                 formatPrint(this.getProfit()) +
                 //(this.getProfit() > 0 ? formatString("***", null) : formatPrint(this.getProfit() - this.getCharge())) +
@@ -50,7 +56,9 @@ public class Record {
             record = new Record();
             System.out.println(formatString("开始时间", 8)
                     + formatString("结束时间", 8)
-                    + formatString("交易额", 6)
+                    + formatString("总额", 4)
+                    + formatString("买入", 4)
+                    + formatString("卖出", 4)
                     + formatString("交易差值", 8)
                     + formatString("净收益", 6)
                     + formatString("费用", 4)
@@ -81,6 +89,22 @@ public class Record {
 
     public void setAmount(double amount) {
         this.amount = amount;
+    }
+
+    public double getBuyAmount() {
+        return buyAmount;
+    }
+
+    public void setBuyAmount(double buyAmount) {
+        this.buyAmount = buyAmount;
+    }
+
+    public double getSellAmount() {
+        return sellAmount;
+    }
+
+    public void setSellAmount(double sellAmount) {
+        this.sellAmount = sellAmount;
     }
 
     public double getProfit() {

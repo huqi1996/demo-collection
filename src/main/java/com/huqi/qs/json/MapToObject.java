@@ -4,12 +4,11 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.huqi.qs.json.bean.Test001;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
+import java.util.*;
 
+/**
+ * @author huqi
+ */
 public class MapToObject {
     public static void main(String[] args) {
         Map<String, Object> map = new HashMap<>();
@@ -18,6 +17,8 @@ public class MapToObject {
         map.put("key003", "value003");
         System.out.println(map);
         System.out.println(JSON.toJSON(map));
+        System.out.println(map.get(null));
+
         Test001 test001 = new Test001();
         test001.setKey001("value001");
         test001.setKey002(null);
@@ -36,5 +37,10 @@ public class MapToObject {
         arr = JSONObject.parseObject(doubles, Double[].class);
         System.out.println(arr[0] + "  " + arr[1]);
         System.out.println(JSONObject.toJSONString(new ArrayList<>()));
+
+        test001 = JSON.parseObject("{\"text\":\"\"}", Test001.class);
+        System.out.println("text : " + test001.getText());
+        System.out.println(test001.getText().length());
+        System.out.println(test001.getText().equals(""));
     }
 }
