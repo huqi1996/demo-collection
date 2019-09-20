@@ -1,4 +1,4 @@
-package com.huqi.qs.codewars;
+package com.huqi.qs.coding;
 
 import java.util.*;
 import java.util.regex.Pattern;
@@ -291,11 +291,11 @@ public class CodeWars {
                 .collect(Collectors.joining(" "));
     }
 
-    public static String SongDecoder(String song) {
+    public static String songDecoder(String song) {
         return Arrays.stream(song.replace("WUB", " ").split(" ")).filter(i -> i.length() > 0).collect(Collectors.joining(" "));
     }
 
-    public static String SongDecoder002(String song) {
+    public static String songDecoder002(String song) {
         return song.replaceAll("(WUB)+", " ").trim();
     }
 

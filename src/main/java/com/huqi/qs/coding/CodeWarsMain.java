@@ -1,13 +1,13 @@
-package com.huqi.qs.codewars;
+package com.huqi.qs.coding;
 
 import java.util.Arrays;
 
-import static com.huqi.qs.codewars.CodeWars.*;
+import static com.huqi.qs.coding.CodeWars.*;
 
 /**
  * @author huqi
  */
-public class Main {
+public class CodeWarsMain {
     public static void main(String[] args) {
         System.out.println(highAndLow001("8 3 -5 42 -1 0 0 -9 4 7 4 -4"));
         System.out.println(highAndLow002("8 3 -5 42 -1 0 0 -9 4 7 4 -4"));
@@ -54,8 +54,8 @@ public class Main {
         System.out.println(spinWords("Hey wollef sroirraw"));
         System.out.println(order("4of Fo1r pe6ople g3ood th5e the2"));
         System.out.println(order002("4of Fo1r pe6ople g3ood th5e the2"));
-        System.out.println(SongDecoder("WUBWEWUBAREWUBWUBTHEWUBCHAMPIONSWUBMYWUBFRIENDWUB"));
-        System.out.println(SongDecoder002("WUBWEWUBAREWUBWUBTHEWUBCHAMPIONSWUBMYWUBFRIENDWUB"));
+        System.out.println(songDecoder("WUBWEWUBAREWUBWUBTHEWUBCHAMPIONSWUBMYWUBFRIENDWUB"));
+        System.out.println(songDecoder002("WUBWEWUBAREWUBWUBTHEWUBCHAMPIONSWUBMYWUBFRIENDWUB"));
         System.out.println(isValid(new char[]{'n', 's', 'n', 's', 'n', 's', 'n', 's', 'n', 's'}));
         System.out.println(encode("Success"));
         System.out.println(encode002("Success"));
