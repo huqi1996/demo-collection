@@ -42,5 +42,45 @@ public class MapToObject {
         System.out.println("text : " + test001.getText());
         System.out.println(test001.getText().length());
         System.out.println(test001.getText().equals(""));
+
+        System.out.println(1 ^ 2);
+        int[] result = fraction(new int[]{3, 2, 0, 2});
+        System.out.println(result[0] + "   " + result[1]);
+
+        System.out.println(robot("URR", new int[][]{{10, 10}}, 3, 2));
+    }
+
+    public static int[] fraction(int[] cont) {
+        if (cont.length == 1) {
+            return new int[]{cont[0], 1};
+        }
+        int[] temp = new int[cont.length - 1];
+        for (int i = 1; i < cont.length; i++) {
+            temp[i - 1] = cont[i];
+        }
+        int[] result = fraction(temp);
+        return new int[]{cont[0] * result[0] + result[1], result[0]};
+    }
+
+    public static boolean robot(String command, int[][] obstacles, int x, int y) {
+        char[] cmd = command.toCharArray();
+        int[] step = new int[]{0, 0};
+        while (true) {
+            for (char ch : cmd) {
+                if (ch == 'U') {
+                    step[1] = step[1] + 1;
+                } else if (ch == 'R') {
+                    step[0] = step[0] + 1;
+                }
+                for (int[] i : obstacles) {
+                    if ((i[0] ^ step[0]) + (i[1] ^ step[1]) == 0) {
+                        return false;
+                    }
+                }
+                if ((x ^ step[0]) + (y ^ step[1]) == 0) {
+                    return true;
+                }
+            }
+        }
     }
 }

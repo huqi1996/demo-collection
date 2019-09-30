@@ -46,6 +46,9 @@ public class MainLambda {
         functionTest();
         biFunctionTest();
         triFunctionTest();
+
+        List<Integer> list = new ArrayList<>();
+        System.out.println(list.stream().filter(i -> i > 0).allMatch(i -> i > 1));
     }
 
     public static void test190621() {
