@@ -11,6 +11,8 @@ public class Record {
     private double charge;
     private String startTime;
     private String endTime;
+    private double poundage;
+    private double stampTax;
 
     private static Record record;
 
@@ -19,12 +21,15 @@ public class Record {
     public Record() {
     }
 
-    public Record(double amount, double buyAmount, double sellAmount, double profit, double charge, String startTime, String endTime) {
+    public Record(double amount, double buyAmount, double sellAmount, double profit,
+                  double charge, double poundage, double stampTax, String startTime, String endTime) {
         this.amount = amount;
         this.buyAmount = buyAmount;
         this.sellAmount = sellAmount;
         this.profit = profit;
         this.charge = charge;
+        this.poundage = poundage;
+        this.stampTax = stampTax;
         this.startTime = startTime;
         this.endTime = endTime;
     }
@@ -47,8 +52,8 @@ public class Record {
                 //(this.getProfit() > 0 ? formatString("***", null) : formatPrint(this.getProfit() - this.getCharge())) +
                 formatPrint(this.getProfit() - this.getCharge()) +
                 formatPrint(this.getCharge()) +
-                formatPrint(this.getCharge() - ((this.getAmount() + this.getProfit()) / 2 * 0.001)) +
-                formatPrint(((this.getAmount() + this.getProfit()) / 2 * 0.001)));
+                formatPrint(this.getPoundage()) +
+                formatPrint(this.getStampTax()));
     }
 
     private void printTitle() {
@@ -137,5 +142,21 @@ public class Record {
 
     public void setEndTime(String endTime) {
         this.endTime = endTime;
+    }
+
+    public double getPoundage() {
+        return poundage;
+    }
+
+    public void setPoundage(double poundage) {
+        this.poundage = poundage;
+    }
+
+    public double getStampTax() {
+        return stampTax;
+    }
+
+    public void setStampTax(double stampTax) {
+        this.stampTax = stampTax;
     }
 }

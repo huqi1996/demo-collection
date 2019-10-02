@@ -1,6 +1,7 @@
 package com.huqi.qs.excel.main;
 
 import com.huqi.qs.excel.bean.Record;
+import org.apache.commons.collections4.CollectionUtils;
 import org.apache.poi.ss.usermodel.CellType;
 import org.apache.poi.xssf.usermodel.XSSFCell;
 import org.apache.poi.xssf.usermodel.XSSFRow;
@@ -61,8 +62,7 @@ public class MainStock {
                 calculateCost(dataRow);
                 data.add(dataRow);
             }
-            calculateSecond(data);
-            calculateFirst(data);
+            calculate(data);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -118,41 +118,13 @@ public class MainStock {
         }
     }
 
-    private static void calculateFirst(List<Map<Integer, String>> data) {
-        Record record = new Record(0, 0, 0, 0, 0, START_TIME, LAST_TIME);
-        for (Map<Integer, String> dataRow : data) {
-            calculateDataRow(dataRow, record);
-        }
-        record.printRecord();
-    }
-
-    private static void calculateDataRow(Map<Integer, String> dataRow, Record record) {
-        int type = Integer.parseInt(dataRow.get(3));
-        if (type == BUY) {
-            record.setAmount(record.getAmount() + Double.parseDouble(dataRow.get(2)));
-            record.setBuyAmount(record.getBuyAmount() + Double.parseDouble(dataRow.get(2)));
-            record.setProfit(record.getProfit() - Double.parseDouble(dataRow.get(2)));
-            record.setCharge(record.getCharge() + Double.parseDouble(dataRow.get(5)));
-        } else if (type == SELL || type == BONUS) {
-            record.setAmount(record.getAmount() + Double.parseDouble(dataRow.get(2)));
-            record.setSellAmount(record.getSellAmount() + Double.parseDouble(dataRow.get(2)));
-            record.setProfit(record.getProfit() + Double.parseDouble(dataRow.get(2)));
-            record.setCharge(record.getCharge() + Double.parseDouble(dataRow.get(5)));
-            if (type == SELL) {
-                record.setCharge(record.getCharge() + Double.parseDouble(dataRow.get(2)) * GOVERNMENT_CHARGE);
-            } else {
-                record.setCharge(record.getCharge() + (Double.parseDouble(dataRow.get(2)) * BONUS_CHARGE));
-            }
-        }
-    }
-
-    private static void calculateSecond(List<Map<Integer, String>> data) {
+    private static void calculate(List<Map<Integer, String>> data) {
         try {
             long firstDate = getTime(FIRST_PHASE);
             long secondDate = getTime(THIRD_PHASE);
-            Record record1 = new Record(0, 0, 0, 0, 0, START_TIME, FIRST_PHASE);
-            Record record2 = new Record(0, 0, 0, 0, 0, FIRST_PHASE, SECOND_PHASE);
-            Record record3 = new Record(0, 0, 0, 0, 0, THIRD_PHASE, LAST_TIME);
+            Record record1 = new Record(0, 0, 0, 0, 0, 0, 0, START_TIME, FIRST_PHASE);
+            Record record2 = new Record(0, 0, 0, 0, 0, 0, 0, FIRST_PHASE, SECOND_PHASE);
+            Record record3 = new Record(0, 0, 0, 0, 0, 0, 0, THIRD_PHASE, LAST_TIME);
             for (Map<Integer, String> dataRow : data) {
                 long dataRowDate = getTime(dataRow.get(4));
                 if (dataRowDate < firstDate) {
@@ -166,9 +138,8 @@ public class MainStock {
                     System.out.println(dataRow.get(4) + "         " + dataRowDate + "    " + secondDate + "@@@@@@@@@@@@@@@@@@");
                 }
             }
-            record1.printRecord();
-            record2.printRecord();
-            record3.printRecord();
+            List<Record> records = Arrays.asList(record1, record2, record3);
+            printSummary(records);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -189,5 +160,50 @@ public class MainStock {
             e.printStackTrace();
         }
         return 0L;
+    }
+
+    private static void calculateDataRow(Map<Integer, String> dataRow, Record record) {
+        long secondDate = getTime(THIRD_PHASE);
+        long dataRowDate = getTime(dataRow.get(4));
+        int type = Integer.parseInt(dataRow.get(3));
+        if (type == BUY) {
+            record.setAmount(record.getAmount() + Double.parseDouble(dataRow.get(2)));
+            record.setBuyAmount(record.getBuyAmount() + Double.parseDouble(dataRow.get(2)));
+            record.setProfit(record.getProfit() - Double.parseDouble(dataRow.get(2)));
+            record.setCharge(record.getCharge() + Double.parseDouble(dataRow.get(5)));
+        } else if (type == SELL || type == BONUS) {
+            record.setAmount(record.getAmount() + Double.parseDouble(dataRow.get(2)));
+            record.setSellAmount(record.getSellAmount() + Double.parseDouble(dataRow.get(2)));
+            record.setProfit(record.getProfit() + Double.parseDouble(dataRow.get(2)));
+            record.setCharge(record.getCharge() + Double.parseDouble(dataRow.get(5)));
+            if (type == SELL && dataRowDate < secondDate) {
+                record.setCharge(record.getCharge() + Double.parseDouble(dataRow.get(2)) * GOVERNMENT_CHARGE);
+                record.setPoundage(record.getCharge() - ((record.getAmount() + record.getProfit()) / 2 * 0.001));
+                record.setStampTax((record.getAmount() + record.getProfit()) / 2 * 0.001);
+            } else if (type == BONUS) {
+                record.setCharge(record.getCharge() + (Double.parseDouble(dataRow.get(2)) * BONUS_CHARGE));
+                record.setPoundage(record.getCharge() - ((record.getAmount() + record.getProfit()) / 2 * 0.001));
+                record.setStampTax((record.getAmount() + record.getProfit()) / 2 * 0.001);
+            } else {
+                record.setPoundage(record.getCharge());
+            }
+        }
+    }
+
+    private static void printSummary(List<Record> records) {
+        if (CollectionUtils.isNotEmpty(records)) {
+            Record summary = new Record(0, 0, 0, 0, 0, 0, 0, START_TIME, LAST_TIME);
+            for (Record record : records) {
+                summary.setAmount(summary.getAmount() + record.getAmount());
+                summary.setBuyAmount(summary.getBuyAmount() + record.getBuyAmount());
+                summary.setSellAmount(summary.getSellAmount() + record.getSellAmount());
+                summary.setProfit(summary.getProfit() + record.getProfit());
+                summary.setCharge(summary.getCharge() + record.getCharge());
+                summary.setPoundage(summary.getPoundage() + record.getPoundage());
+                summary.setStampTax(summary.getStampTax() + record.getStampTax());
+                record.printRecord();
+            }
+            summary.printRecord();
+        }
     }
 }
