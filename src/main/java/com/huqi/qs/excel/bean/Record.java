@@ -16,7 +16,7 @@ public class Record {
 
     private static Record record;
 
-    private static final int LENGTH = 15;
+    private static final int LENGTH = 13;
 
     public Record() {
     }
@@ -59,14 +59,14 @@ public class Record {
     private void printTitle() {
         if (record == null) {
             record = new Record();
-            System.out.println(formatString("开始时间", 8)
-                    + formatString("结束时间", 8)
-                    + formatString("总额", 4)
+            System.out.println(formatString("开始时间", 7)
+                    + formatString("结束时间", 7)
+                    + formatString("总额", 3)
                     + formatString("买入", 4)
                     + formatString("卖出", 4)
-                    + formatString("交易差值", 8)
+                    + formatString("交易差值", 7)
                     + formatString("净收益", 6)
-                    + formatString("费用", 4)
+                    + formatString("费用", 3)
                     + formatString("佣金", 4)
                     + formatString("印花税", 6));
         }
