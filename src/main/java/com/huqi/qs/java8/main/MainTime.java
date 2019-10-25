@@ -19,5 +19,8 @@ public class MainTime {
         LocalDateTime end = LocalDateTime.of(LocalDate.now(), LocalTime.MAX);
         timestamp = Timestamp.valueOf(end);
         System.out.println(timestamp.toString());
+        System.out.println(Integer.MAX_VALUE + 2L);
+        System.out.println(Integer.MAX_VALUE + 2);
+        System.out.println(Integer.BYTES + " - " + Integer.SIZE + " - " + Integer.TYPE);
     }
 }
