@@ -323,4 +323,35 @@ public class CodeWars {
     public static String longest(String s1, String s2) {
         return (s1 + s2).chars().distinct().sorted().mapToObj(i -> String.valueOf((char) i)).collect(Collectors.joining());
     }
+
+    public static int[] monkeyCount(final int n) {
+        int[] arr = new int[n];
+        for (int i = 1; i <= n; i++) {
+            arr[i - 1] = i;
+        }
+        return arr;
+    }
+
+    public static int[] monkeyCount002(final int n) {
+        return IntStream.range(1, n).toArray();
+    }
+
+    public static List<String> sort(List<String> textbooks) {
+        return textbooks.stream().sorted(String::compareToIgnoreCase).collect(Collectors.toList());
+    }
+
+    public static List<String> sort002(List<String> textbooks) {
+        textbooks.sort(Comparator.naturalOrder());
+        return textbooks;
+    }
+
+    public static List<String> sort003(List<String> textbooks) {
+        //use sort() from Collections with the static field of String class to ensure case insensitivity
+        textbooks.sort(String.CASE_INSENSITIVE_ORDER);
+        return textbooks;
+    }
+
+    public static List<String> sort004(List<String> textbooks) {
+        return textbooks.stream().sorted(String.CASE_INSENSITIVE_ORDER).collect(Collectors.toList());
+    }
 }
