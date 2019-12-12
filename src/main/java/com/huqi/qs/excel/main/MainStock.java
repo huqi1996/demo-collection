@@ -28,11 +28,8 @@ public class MainStock {
     public static final int BUY = 0;
     public static final int SELL = 1;
     public static final int BONUS = 2;
-    public static final String START_TIME = "2014-10-30";
-    public static final String FIRST_PHASE = "2015-08-10";
-    public static final String SECOND_PHASE = "2017-05-16";
-    public static final String THIRD_PHASE = "2018-01-15";
-    public static final String LAST_TIME = "2019-04-01";
+
+    public static List<String> dateTimes = new ArrayList<>();
 
     public static Pattern firstPattern;
     public static Pattern secondPattern;
@@ -44,6 +41,13 @@ public class MainStock {
         secondPattern = Pattern.compile("\\d{4}-\\d-\\d{2}");
         thirdPattern = Pattern.compile("\\d{4}-\\d{2}-\\d");
         fourthPattern = Pattern.compile("\\d{4}-\\d-\\d");
+
+        dateTimes.add("2014-10-30");
+        dateTimes.add("2015-08-10");
+        dateTimes.add("2017-05-16");
+        dateTimes.add("2018-01-15");
+        dateTimes.add("2019-04-01");
+        dateTimes.add("2100-01-01");
     }
 
     public static void main(String[] args) {
@@ -81,8 +85,8 @@ public class MainStock {
 
     private static void calculateCost(Map<Integer, String> dataRow) {
         try {
-            long firstDate = getTime(FIRST_PHASE);
-            long secondDate = getTime(THIRD_PHASE);
+            long firstDate = getTime(dateTimes.get(1));
+            long secondDate = getTime(dateTimes.get(3));
             long dataRowDate = getTime(dataRow.get(4));
             int type = Integer.parseInt(dataRow.get(3));
             double a;
@@ -120,25 +124,30 @@ public class MainStock {
 
     private static void calculate(List<Map<Integer, String>> data) {
         try {
-            long firstDate = getTime(FIRST_PHASE);
-            long secondDate = getTime(THIRD_PHASE);
-            Record record1 = new Record(0, 0, 0, 0, 0, 0, 0, START_TIME, FIRST_PHASE);
-            Record record2 = new Record(0, 0, 0, 0, 0, 0, 0, FIRST_PHASE, SECOND_PHASE);
-            Record record3 = new Record(0, 0, 0, 0, 0, 0, 0, THIRD_PHASE, LAST_TIME);
+            long firstDate = getTime(dateTimes.get(1));
+            long secondDate = getTime(dateTimes.get(3));
+            long thirdDate = getTime(dateTimes.get(4));
+            Record record1 = new Record(0, 0, 0, 0, 0, 0, 0, dateTimes.get(0), dateTimes.get(1));
+            Record record2 = new Record(0, 0, 0, 0, 0, 0, 0, dateTimes.get(1), dateTimes.get(2));
+            Record record3 = new Record(0, 0, 0, 0, 0, 0, 0, dateTimes.get(3), dateTimes.get(4));
+            Record record4 = new Record(0, 0, 0, 0, 0, 0, 0, dateTimes.get(4), dateTimes.get(dateTimes.size() - 1));
             for (Map<Integer, String> dataRow : data) {
                 long dataRowDate = getTime(dataRow.get(4));
                 if (dataRowDate < firstDate) {
                     calculateDataRow(dataRow, record1);
-                    System.out.println(dataRow.get(4) + "         " + dataRowDate + "    " + firstDate + "-------------------");
+                    System.out.println(dataRow.get(4) + "         " + dataRowDate + "    " + firstDate + "---111");
                 } else if (dataRowDate < secondDate) {
                     calculateDataRow(dataRow, record2);
-                    System.out.println(dataRow.get(4) + "         " + dataRowDate + "    " + firstDate + "+++++++++++++++++++");
-                } else {
+                    System.out.println(dataRow.get(4) + "         " + dataRowDate + "    " + firstDate + "---222");
+                } else if (dataRowDate <= thirdDate) {
                     calculateDataRow(dataRow, record3);
-                    System.out.println(dataRow.get(4) + "         " + dataRowDate + "    " + secondDate + "@@@@@@@@@@@@@@@@@@");
+                    System.out.println(dataRow.get(4) + "         " + dataRowDate + "    " + firstDate + "---333");
+                } else {
+                    calculateDataRow(dataRow, record4);
+                    System.out.println(dataRow.get(4) + "         " + dataRowDate + "    " + secondDate + "---444");
                 }
             }
-            List<Record> records = Arrays.asList(record1, record2, record3);
+            List<Record> records = Arrays.asList(record1, record2, record3, record4);
             printSummary(records);
         } catch (Exception e) {
             e.printStackTrace();
@@ -163,7 +172,7 @@ public class MainStock {
     }
 
     private static void calculateDataRow(Map<Integer, String> dataRow, Record record) {
-        long secondDate = getTime(THIRD_PHASE);
+        long secondDate = getTime(dateTimes.get(3));
         long dataRowDate = getTime(dataRow.get(4));
         int type = Integer.parseInt(dataRow.get(3));
         if (type == BUY) {
@@ -192,7 +201,7 @@ public class MainStock {
 
     private static void printSummary(List<Record> records) {
         if (CollectionUtils.isNotEmpty(records)) {
-            Record summary = new Record(0, 0, 0, 0, 0, 0, 0, START_TIME, LAST_TIME);
+            Record summary = new Record(0, 0, 0, 0, 0, 0, 0, dateTimes.get(0), dateTimes.get(dateTimes.size() - 1));
             for (Record record : records) {
                 summary.setAmount(summary.getAmount() + record.getAmount());
                 summary.setBuyAmount(summary.getBuyAmount() + record.getBuyAmount());
