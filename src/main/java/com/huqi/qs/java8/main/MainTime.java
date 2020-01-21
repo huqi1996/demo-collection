@@ -1,14 +1,11 @@
 package com.huqi.qs.java8.main;
 
-import org.apache.xmlbeans.impl.validator.ValidatorUtil;
-
 import java.sql.Timestamp;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.*;
-import java.util.stream.Collectors;
 
 /**
  * @author huqi 20190920
@@ -40,5 +37,15 @@ public class MainTime {
         map.put(3L, 4L);
         System.out.println("Map: " + map);
         System.out.println("\n".length());
+
+        System.out.println("aaa/aaa".indexOf("/"));
+        System.out.println("aaa".indexOf("/"));
+
+        System.out.println(Byte.decode("0xf"));
+        System.out.println(Byte.decode("3"));
+        System.out.println(Byte.parseByte("3"));
+        System.out.println(Byte.valueOf("3"));
+        short sh = -15;
+        System.out.println(Short.toUnsignedInt(sh));
     }
 }
