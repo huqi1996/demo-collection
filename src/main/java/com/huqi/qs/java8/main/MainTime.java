@@ -24,13 +24,6 @@ public class MainTime {
         System.out.println(Integer.MAX_VALUE + 2L);
         System.out.println(Integer.MAX_VALUE + 2);
         System.out.println(Integer.BYTES + " - " + Integer.SIZE + " - " + Integer.TYPE);
-        long startTime = System.currentTimeMillis();
-        try {
-            Thread.sleep(1000L);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-        System.out.println(System.currentTimeMillis() - startTime);
         List<Long> list = Arrays.asList(1L, 2L, 3L, 4L, 5L);
         System.out.println("List: " + list);
         Map<Long, Long> map = new HashMap<>();
