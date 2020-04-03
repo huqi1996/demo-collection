@@ -8,7 +8,7 @@ import java.util.List;
 /**
  * @author huqi 20190325
  */
-public class ListUtil {
+public class ListUtils {
     public static <E> List<E> removeAllWithoutRepeat(List<E> collection, List<?> remove) {
         List<E> list = new ArrayList<>();
         List<Integer> indexes = new ArrayList<>();

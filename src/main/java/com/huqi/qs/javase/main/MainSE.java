@@ -1,8 +1,7 @@
 package com.huqi.qs.javase.main;
 
 import com.huqi.qs.java8.bean.Person;
-import com.huqi.qs.javase.util.ListUtil;
-import org.apache.commons.collections4.ListUtils;
+import com.huqi.qs.javase.util.ListUtils;
 import org.apache.commons.lang3.StringUtils;
 
 import java.time.LocalDate;
@@ -71,8 +70,8 @@ public class MainSE {
         list2.add("a");
         list2.add("b");
         list2.add("c");
-        System.out.println(ListUtil.removeAllWithoutRepeat(list1, list2).size());
-        System.out.println(ListUtils.removeAll(list1, list2).size());
+        System.out.println(ListUtils.removeAllWithoutRepeat(list1, list2).size());
+        System.out.println(org.apache.commons.collections4.ListUtils.removeAll(list1, list2).size());
     }
 
     public static void demo20190523() {
