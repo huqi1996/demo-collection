@@ -1,7 +1,9 @@
 package com.huqi.qs.java8.main;
 
 import com.huqi.qs.javase.util.ListUtils;
+import org.apache.commons.lang3.StringUtils;
 
+import java.math.BigDecimal;
 import java.sql.Timestamp;
 import java.time.*;
 import java.time.temporal.TemporalAdjusters;
@@ -87,6 +89,68 @@ public class MainTime {
         List<Long> result = org.apache.commons.collections4.ListUtils.removeAll(list1, list2);
         System.out.println(result);
         System.out.println(ListUtils.removeAllWithoutRepeat(list1, list2));
+        System.out.println(System.currentTimeMillis());
+        System.out.println("aaaa".indexOf(","));
+        BigDecimal number = new BigDecimal("111.111");
+        System.out.println(number.toString());
+        System.out.println(map.values().getClass());
+        System.out.println(map.values());
+        System.out.println(new ArrayList<>(map.values()));
+        List<Integer> ints = Arrays.asList(1, 3, 5, 0, 2, 4, 6, 8, 9);
+        ints.parallelStream().forEach(a -> {
+            try {
+                float b = 1 / a;
+                System.out.println(b);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        });
+
+        String demo1 = "123-123";
+        System.out.println(demo1.substring(0, demo1.indexOf("-")));
+        System.out.println(demo1.substring(demo1.indexOf("-") + 1));
+
+        String currentColumnTag = demo001(null);
+        System.out.println(currentColumnTag);
+        for (int i = 0; i < 1000; i++) {
+            currentColumnTag = demo001(currentColumnTag);
+            System.out.println(currentColumnTag);
+        }
+
+        Map<String, Long> columnsFields = new HashMap<>();
+        columnsFields.put("0-0", 1L);
+        columnsFields.put("0-1", 2L);
+        columnsFields.put("1-0", 3L);
+        columnsFields.put("1-1", 4L);
+        columnsFields.put("2-0", 5L);
+        System.out.println(columnsFields.keySet().stream().map(columnName -> Integer.parseInt(columnName.substring(0, columnName.indexOf("-")))).distinct().count());
+        System.out.println("2-0".substring("2-0".indexOf("-") + 1));
+    }
+
+    private static String demo001(String currentColumnTag) {
+        if (StringUtils.isEmpty(currentColumnTag)) {
+            return "A";
+        }
+        int value = 0;
+        char[] chars = currentColumnTag.toCharArray();
+        for (int i = 0; i < chars.length; i++) {
+            char c = chars[chars.length - 1 - i];
+            int charValue = c - 64;
+            value = value + charValue * (int) Math.pow(26, i);
+        }
+        value++;
+        StringBuilder builder = new StringBuilder();
+        while (value > 26) {
+            if (value % 26 == 0) {
+                builder.append((char) (26 + 64));
+                value = (value - 26) / 26;
+            } else {
+                builder.append((char) (value % 26 + 64));
+                value /= 26;
+            }
+        }
+        builder.append((char) (value + 64));
+        return builder.reverse().toString();
     }
 
     public static List<String> generateParenthesis(int n) {

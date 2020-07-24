@@ -354,4 +354,33 @@ public class CodeWars {
     public static List<String> sort004(List<String> textbooks) {
         return textbooks.stream().sorted(String.CASE_INSENSITIVE_ORDER).collect(Collectors.toList());
     }
+
+    public static int findMax(TreeNode root) {
+        if (root.left == null && root.right == null) {
+            return root.value;
+        }
+        int leftMax = Integer.MIN_VALUE;
+        if (root.left != null) {
+            leftMax = findMax(root.left);
+        }
+        int rightMax = Integer.MIN_VALUE;
+        if (root.right != null) {
+            rightMax = findMax(root.right);
+        }
+        return Math.max(root.value, Math.max(leftMax, rightMax));
+    }
+
+    public static int findMax002(TreeNode root) {
+        if (root == null) {
+            return Integer.MIN_VALUE;
+        }
+        return Math.max(root.value, Math.max(root.left.value, root.right.value));
+    }
+
+    public static int maxSum(TreeNode root) {
+        if (root == null) {
+            return 0;
+        }
+        return Math.max(root.value + maxSum(root.left), root.value + maxSum(root.right));
+    }
 }

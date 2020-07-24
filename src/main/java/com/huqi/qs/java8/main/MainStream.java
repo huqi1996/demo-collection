@@ -163,7 +163,12 @@ public class MainStream {
         LongSummaryStatistics peopleStatistics = people.stream().collect(Collectors.summarizingLong(Person::getSalary));
         System.out.println(peopleStatistics);
         System.out.println(people.stream().filter(t -> t.getSalary() > 100000).map(Person::getSalary).reduce(Long::sum));
-        System.out.println(people.stream().collect(Collectors.groupingBy(t -> Country.fromCode(t.getCountry()))));
+        System.out.println("按照country分组：" + people.stream().collect(Collectors.groupingBy(t -> Country.fromCode(t.getCountry()))));
+
+        // 测试groupingBy之后的对象是不是原来的对象
+        Map<Country, List<Person>> personGroup = people.stream().collect(Collectors.groupingBy(t -> Country.fromCode(t.getCountry())));
+        System.out.println(personGroup.get(Country.CHINA).get(0).equals(people.get(0)));
+
         System.out.println(people.stream().collect(Collectors.groupingBy(t -> Country.fromCode(t.getCountry()),
                 Collectors.groupingBy(t -> t.getSalary() > 10000))));
         System.out.println(people.stream().collect(Collectors.groupingBy(t -> Country.fromCode(t.getCountry()),

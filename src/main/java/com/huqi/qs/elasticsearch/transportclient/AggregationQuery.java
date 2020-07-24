@@ -13,11 +13,12 @@ import org.elasticsearch.search.aggregations.metrics.valuecount.InternalValueCou
 import static jdk.nashorn.internal.objects.Global.Infinity;
 
 /**
- * @author huqi 20190222
+ * @author huqi
+ * @date 20190222
  */
 public class AggregationQuery {
     public static void main(String[] args) {
-        Client client = PutMapping.getClient();
+        Client client = ElasticSearchUtils.getClient();
         BoolQueryBuilder query = QueryBuilders.boolQuery();
         // query.must(QueryBuilders.termQuery("formId", 0));
         SearchRequestBuilder builder;

@@ -7,11 +7,12 @@ import org.elasticsearch.client.Client;
 import static org.elasticsearch.common.xcontent.XContentFactory.jsonBuilder;
 
 /**
- * @author huqi 20190228
+ * @author huqi
+ * @date 20190228
  */
 public class UpdateDoc {
     public static void main(String[] args) throws Exception {
-        Client client = PutMapping.getClient();
+        Client client = ElasticSearchUtils.getClient();
         UpdateRequest updateRequest;
 
         // 添加field

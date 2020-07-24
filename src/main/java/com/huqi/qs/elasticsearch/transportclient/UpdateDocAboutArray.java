@@ -15,12 +15,13 @@ import static org.elasticsearch.common.xcontent.XContentFactory.jsonBuilder;
 import static org.elasticsearch.index.query.QueryBuilders.*;
 
 /**
- * @author huqi 20190327
+ * @author huqi
+ * @date 20190327
  */
 public class UpdateDocAboutArray {
     public static void main(String[] args) throws Exception {
 
-        Client client = PutMapping.getClient();
+        Client client = ElasticSearchUtils.getClient();
         IndexRequest indexRequest = new IndexRequest("test190307", "generalFormV2Values", "666")
                 .source(jsonBuilder()
                         .startObject()
