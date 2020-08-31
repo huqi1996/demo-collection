@@ -25,6 +25,8 @@ import org.elasticsearch.search.aggregations.metrics.max.Max;
 
 import java.io.IOException;
 import java.util.*;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 import static org.elasticsearch.common.xcontent.XContentFactory.jsonBuilder;
 import static org.elasticsearch.index.query.QueryBuilders.nestedQuery;
@@ -140,7 +142,7 @@ public class ElasticSearchUtils {
         }
         SearchRequestBuilder builder = getClient().prepareSearch(INDEX).setTypes(TYPE).setQuery(query)
                 .addAggregation(AggregationBuilders.count("count").field("id")).setSize(0);
-        System.out.println("countDocuments: " + getSearchResponse(builder).getAggregations().get("count"));
+        //System.out.println("countDocuments: " + getSearchResponse(builder).getAggregations().get("count"));
     }
 
     /**
@@ -148,9 +150,9 @@ public class ElasticSearchUtils {
      */
     public static SearchResponse getSearchResponse(SearchRequestBuilder builder) {
         try {
-            System.out.println("------------------------------------------------");
+            /*System.out.println("------------------------------------------------");
             System.out.println("getSearchResponse: " + builder.toString());
-            System.out.println("------------------------------------------------");
+            System.out.println("------------------------------------------------");*/
             return builder.execute().actionGet();
         } catch (ElasticsearchException e) {
             e.printStackTrace();
@@ -284,9 +286,9 @@ public class ElasticSearchUtils {
     /**
      * 模糊查询
      */
-    public static void wildcardQueryDocument() {
+    public static void wildcardQueryDocument(String text) {
         BoolQueryBuilder query = QueryBuilders.boolQuery();
-        query.must(QueryBuilders.wildcardQuery("name", "*" + getRandomString(2) + "*"));
+        query.must(QueryBuilders.wildcardQuery("name", "*" + text + "*"));
         countDocuments(query);
     }
 
@@ -331,17 +333,17 @@ public class ElasticSearchUtils {
     public static void queryDocument() {
         rangeQueryDocument();
         termQueryDocument();
-        wildcardQueryDocument();
+        wildcardQueryDocument(getRandomString(2));
         nestedQueryDocument();
         nestedAggregationDocument();
     }
 
-    public static void main(String[] args) {/*
-        putMapping();
+    public static void main(String[] args) {
+        /*putMapping();
         createDocuments(NUMBER);
         updateDocument();
         deleteDocument();
-        queryDocument();*/
-        System.out.println(getClient().prepareGet(INDEX, TYPE, "400").setRefresh(true).execute().actionGet().getSource() == null);
+        queryDocument();
+        System.out.println(getClient().prepareGet(INDEX, TYPE, "400").setRefresh(true).execute().actionGet().getSource() == null);*/
     }
 }

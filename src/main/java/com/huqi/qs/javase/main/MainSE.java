@@ -6,12 +6,15 @@ import com.huqi.qs.java8.bean.Person;
 import com.huqi.qs.javase.util.ListUtils;
 import org.apache.commons.lang3.StringUtils;
 
+import java.io.IOException;
 import java.sql.Timestamp;
 import java.time.*;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 /**
@@ -19,11 +22,13 @@ import java.util.stream.Collectors;
  */
 public class MainSE {
 
+    private static Pattern p = Pattern.compile("java");
+
     public static void main(String[] args) {
-//        demo20190212();
-//        demo20190325();
-//        demo20190523();
-        // demoLocalDateTime();
+        demo20190212();
+        demo20190325();
+        demo20190523();
+        demoLocalDateTime();
         StringBuilder builder = new StringBuilder();
         builder.append("a");
         builder.append("a");
@@ -31,13 +36,16 @@ public class MainSE {
         System.out.println(builder.length());
         System.out.println("aaa123bbb".replaceAll("\\d+", ""));
         System.out.println("abc[]*/\\:?123");
+        System.out.println("([*/:\\[]?])");
         System.out.println("abc[]*/\\:?123".replaceAll("([*/:\\\\\\[\\]?])", ""));
         System.out.println(DateTimeFormatter.ofPattern("yyyyMMddHHmm").format(new Timestamp(System.currentTimeMillis()).toLocalDateTime()));
         Map<String, String> map001 = new HashMap<>();
         map001.put("111", "111");
         map001.put("333", "333");
         map001.put("222", "222");
-        System.out.println(map001);
+        map001.put("222", "222222");
+        map001.put("111", "111111111");
+        System.out.println("map001 is " + map001);
         System.out.println(String.format("aaa%sbbb%s", "111", "222"));
         List<String> list001 = new ArrayList<>();
         list001.add("111");
@@ -45,34 +53,10 @@ public class MainSE {
         list001.add("333");
         System.out.println(list001.remove(0));
         System.out.println(list001);
-
-        NoteTemplate note = new NoteTemplate();
-        note.setPrefix("注意事项\r\n" +
-                "- 标红字段为必填项\r\n" +
-                "- 导入模板中不包括图片、附件或只读字段\r\n" +
-                "- 单行文本已设置校验规则的，请注意内容格式是否正确\r\n");
-        note.setSuffix("- 省市区字段请使用“/”分隔，例如“广东省/深圳市/南山区”\r\n" +
-                "- 楼宇房源字段请使用“/”分隔，例如“1栋/101”\r\n" +
-                "- 子表单字段请在其它工作表中编辑。默认第一个字段作为子表单数据关系映射，你可以在表头中重新选择。请尽量选择可用作数据唯一标识的字段，否则校验重复时子表单数据则无法导入\r\n");
-        note.setNumberRange("- %s，数字范围字段请使用英文逗号“,”隔开，例如“1,100”\r\n");
-        note.setDateShort("- %s，日期字段请使用“yyyy-MM-dd”格式\r\n");
-        note.setDateShortRange("- %s，日期范围字段请使用“yyyy-MM-dd”格式。日期范围请使用英文逗号“,”隔开，例如“1970-01-01, 1970-01-02”\r\n");
-        note.setDateLong("- %s，日期字段请使用“yyyy-MM-dd  hh:mm”格式\r\n");
-        note.setDateLongRange("- %s，日期范围字段请使用“yyyy-MM-dd hh:mm”格式。日期范围请使用英文逗号“,”隔开，例如“1970-01-01 12:00, 1970-01-02 12:00”\r\n");
-        note.setTimeShort("- %s，时刻字段请使用“hh:mm”格式\r\n");
-        note.setTimeLong("- %s，时刻字段请使用“hh:mm:ss”格式\r\n");
-        note.setCheckbox("- %s，多选字段请使用“,”分隔，例如“选项1,选项2”\r\n");
-        note.setUserSelector("- %s，选择用户字段请在输入姓名并在英文括号中输入手机号码，例如“张三(13800138000)”，多个用户使用英文逗号“,”分隔\r\n");
-        System.out.println(note);
         System.out.println(JSONObject.toJSONString("aaa".split(",")));
-
-        System.out.println(list001.stream().collect(Collectors.joining("、")));
-        System.out.println(String.format("aaa%sbbb", list001.stream().collect(Collectors.joining("、"))));
-
         System.out.println("list001= " + list001);
-
+        System.out.println(list001.stream().collect(Collectors.joining("、")));
         System.out.println("a".startsWith("bb"));
-
         String date001 = "2020-06-10";
         System.out.println(date001.matches("\\d{4}-\\d{1,2}-\\d{1,2}"));
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
@@ -94,17 +78,13 @@ public class MainSE {
         System.out.println(apple001);
         updateApple(apple001);
         System.out.println(apple001);
-        System.out.println(System.getProperty("line.separator").equals("/r/n"));
+        System.out.println("\r\n".equals(System.getProperty("line.separator")));
         String str001 = "abc";
         str001 = Optional.ofNullable(str001)
                 .map(str -> str.replaceAll(".$", ""))
                 .orElse(str001);
         System.out.println(str001);
-        String str002 = null;
-        StringBuilder builder1 = new StringBuilder();
-        builder1.append(str001);
-        builder1.append(str002);
-        System.out.println(builder1.toString());
+        System.out.println(str001 + null);
         Timestamp timestamp001 = new Timestamp(System.currentTimeMillis());
         System.out.println(timestamp001);
         System.out.println(timestamp001.toString());
@@ -120,7 +100,17 @@ public class MainSE {
         System.out.println(int001 << 8);
         int001 = 0xff;
         System.out.println(int001);
-        Map<Integer, String> map002 = Collections.synchronizedMap(new HashMap<>());
+        System.out.println("map001 is: " + map001);
+        Map<String, String> map002 = Collections.synchronizedMap(map001);
+        System.out.println("map002 is: " + map002);
+        // 修改map001，map002也会跟着修改
+        map001.put("555", "555");
+        System.out.println("map001 is: " + map001);
+        System.out.println("map002 is: " + map002);
+        // 修改map002，map001也会跟着修改
+        map002.put("666", "666");
+        System.out.println("map001 is: " + map001);
+        System.out.println("map002 is: " + map002);
         BlockingQueue queue001 = new ArrayBlockingQueue<String>(2);
         System.out.println(queue001.offer("aaa"));
         System.out.println(queue001.offer("bbb"));
@@ -128,11 +118,10 @@ public class MainSE {
         System.out.println(queue001.poll());
         System.out.println(queue001.poll());
         // 不允许往队列中插入 null ，否则无法区分 poll 和 peek 方法返回的 null 是提示还是一个真正的元素。
-        // System.out.println(queue001.offer(null));
+        // System.out.println(queue001.offer(null)); // NullPointerException
         System.out.println(Integer.parseInt("111", 2));
+        System.out.println(list001);
         System.out.println(list001.subList(0, 1));
-        long now = System.currentTimeMillis();
-        System.out.println(new Timestamp(now));
 
         // 1.LocalDateTime获取毫秒数
         //获取秒数
@@ -141,13 +130,85 @@ public class MainSE {
         //获取毫秒数
         long milliSecond = LocalDateTime.now().toInstant(ZoneOffset.of("+8")).toEpochMilli();
         System.out.println("当前时间的毫秒数：" + milliSecond);
-        System.out.println(System.currentTimeMillis());
+        System.out.println("当前时间的毫秒数：" + System.currentTimeMillis());
         // 2.LocalDateTime与String互转
         //时间转字符串格式化
         System.out.println(LocalDateTime.now(ZoneOffset.of("+8")).format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss:SSS")));
         //字符串转时间
-        System.out.println(LocalDateTime.parse("1970-01-01 00:00:00", DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
+        LocalDateTime dateTime1 = LocalDateTime.parse("1970-01-01 00:00:00", DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+        System.out.println(dateTime1);
+        System.out.println(dateTime1.toInstant(ZoneOffset.of("+8")).toEpochMilli());
         System.out.println(new Timestamp(-28800000));
+
+        // System.out.println只能直接打印char[]，其它元素类型的数组都被当成object打印，而object的打印实现是String.valueOf(object)
+        char[] ch = new char[]{'x', 'y', '中'};
+        System.out.println(ch);
+        System.out.println("ch=" + ch);
+        int[] intArray = {1, 2, 3, 4};
+        System.out.println(intArray);
+        System.out.println(Integer.toHexString(ch[0] & 0xFFFFFF));
+        System.out.println(Integer.toHexString(ch[2] & 0xFFFFFF));
+
+        boolean isOpen = false;
+        // 打印是否开启了断言，如果为false，则没有启用断言
+        // 如果开启了断言，会将isOpen的值改为true
+        // JVM默认关闭断言指令，即遇到assert语句就自动忽略了，不执行。
+        // 要执行assert语句，必须给Java虚拟机传递-enableassertions（可简写为-ea）参数启用断言
+        assert isOpen = true;
+        System.out.println(isOpen);
+
+        // 泛型 + 可变长参数
+        String[] arr = asArray("one", "two", "three");
+        System.out.println(Arrays.toString(arr));
+        // ClassCastException:
+        /*String[] firstTwo = pickTwo("one", "two", "three");
+        System.out.println(Arrays.toString(firstTwo));*/
+
+        List<String> list002 = Arrays.asList(arr);
+        // list002只读
+        // list002.add("111");
+        System.out.println(list002);
+
+        Matcher m = p.matcher("The java book is java program book c");
+        StringBuffer sb = new StringBuffer();
+        if (m.find()) {
+            m.appendReplacement(sb, "python");
+        }
+        System.out.println(sb);
+        if (m.find()) {
+            m.appendReplacement(sb, "python");
+        }
+        System.out.println(sb);
+        if (m.find()) {
+            m.appendReplacement(sb, "python");
+        }
+        System.out.println(sb);
+        System.out.println(m.replaceAll("c++"));
+    }
+
+    static <K> K[] pickTwo(K k1, K k2, K k3) {
+        System.out.println(k1.getClass());
+        K[] arr = asArray(k1, k2);
+        System.out.println(arr.getClass());
+        return arr;
+    }
+
+    static <T> T[] asArray(T... objs) {
+        System.out.println(objs.getClass());
+        return objs;
+    }
+
+    public static void processException() throws Exception {
+        try {
+            throwException();
+        } finally {
+            // finally不能省略
+            System.out.println("end");
+        }
+    }
+
+    public static void throwException() throws IOException {
+        throw new IOException();
     }
 
     //3.Date与LocalDateTime互转
@@ -180,6 +241,7 @@ public class MainSE {
     }
 
     public static void demo20190212() {
+        // 1,3,5,7,9这些数字太简单，得跳过
         int result = 11;
         while (true) {
             boolean flag = Integer.toBinaryString(result).equals(StringUtils.reverse(Integer.toBinaryString(result)))
@@ -197,13 +259,12 @@ public class MainSE {
         String a = "[\"aaa\",\"bbb\"]";
         System.out.println(a.substring(1, a.length() - 1).split(",")[0]);
         System.out.println("[]".substring(1, 1).split(",").length);
-        System.out.println("\"" + "[]".substring(1, 1).split(",")[0] + "\"");
-        System.out.println("\"\"");
-        System.out.println("".startsWith("\""));
+        System.out.println("[]".substring(1, 1).split(",")[0]);
 
         for (int i = 0; i < 3; i++) {
             for (int j = 0; j < 3; j++) {
                 if (i == j) {
+                    // break只终止内层for循环，不会终止外层for循环
                     break;
                 }
             }
@@ -225,7 +286,9 @@ public class MainSE {
         list2.add("a");
         list2.add("b");
         list2.add("c");
+        // 不会重复剔除相同元素
         System.out.println(ListUtils.removeAllWithoutRepeat(list1, list2).size());
+        // 重复剔除相同元素
         System.out.println(org.apache.commons.collections4.ListUtils.removeAll(list1, list2).size());
     }
 
@@ -246,23 +309,24 @@ public class MainSE {
         people.add(new Person(2L, "Jjj"));
         System.out.println(people);
 
+        // 按userName排序
         Collections.sort(people);
         System.out.println(people);
     }
 
     public static void demoLocalDateTime() {
         LocalDateTime todayStart = LocalDateTime.of(LocalDate.now(), LocalTime.MIN);
-        System.out.println(todayStart);
-        System.out.println(todayStart.atZone(ZoneId.systemDefault()).toInstant().toEpochMilli());
-        System.out.println(LocalDateTime.now().atZone(ZoneId.systemDefault()).toInstant().toEpochMilli());
-        System.out.println(System.currentTimeMillis());
+        System.out.println("今天凌晨0点：" + todayStart);
+        System.out.println("今天凌晨0点：" + todayStart.atZone(ZoneId.systemDefault()).toInstant().toEpochMilli());
+        System.out.println("当前时间：" + LocalDateTime.now().atZone(ZoneId.systemDefault()).toInstant().toEpochMilli());
+        System.out.println("当前时间：" + System.currentTimeMillis());
         LocalDateTime todayEnd = LocalDateTime.of(LocalDate.now(), LocalTime.MAX);
-        System.out.println(todayEnd);
-        System.out.println(todayEnd.atZone(ZoneId.systemDefault()).toInstant().toEpochMilli());
-        System.out.println(todayEnd.atZone(ZoneId.systemDefault()).toInstant().toEpochMilli()
-                - todayStart.atZone(ZoneId.systemDefault()).toInstant().toEpochMilli());
-        System.out.println(3600 * 24 * 1000);
-        System.out.println(LocalDateTime.of(2100, 1, 1, 1, 1));
-        System.out.println(LocalDateTime.of(2100, 1, 1, 1, 1).atZone(ZoneId.systemDefault()).toInstant().toEpochMilli());
+        System.out.println("今天晚上24点：" + todayEnd);
+        System.out.println("今天晚上24点：" + todayEnd.atZone(ZoneId.systemDefault()).toInstant().toEpochMilli());
+        System.out.println("一天的时长：" + (todayEnd.atZone(ZoneId.systemDefault()).toInstant().toEpochMilli()
+                - todayStart.atZone(ZoneId.systemDefault()).toInstant().toEpochMilli()));
+        System.out.println("一天的时长：" + 3600 * 24 * 1000);
+        System.out.println("2100年1月1日1时1分：" + LocalDateTime.of(2100, 1, 1, 1, 1));
+        System.out.println("2100年1月1日1时1分：" + LocalDateTime.of(2100, 1, 1, 1, 1).atZone(ZoneId.systemDefault()).toInstant().toEpochMilli());
     }
 }
