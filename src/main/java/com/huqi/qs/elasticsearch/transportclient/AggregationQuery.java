@@ -10,7 +10,7 @@ import org.elasticsearch.search.aggregations.bucket.terms.Terms;
 import org.elasticsearch.search.aggregations.metrics.max.Max;
 import org.elasticsearch.search.aggregations.metrics.valuecount.InternalValueCount;
 
-import static jdk.nashorn.internal.objects.Global.Infinity;
+//import static jdk.nashorn.internal.objects.Global.Infinity;
 
 /**
  * @author huqi
@@ -37,7 +37,7 @@ public class AggregationQuery {
                 .setSize(0);
         response = builder.get();
         Max max = response.getAggregations().get("maxTime");
-        System.out.println(max.getValue() == -Infinity);
+        //System.out.println(max.getValue() == -Infinity);
         System.out.println(max.getValue() < 0);
         System.out.println(max.getValue());
         System.out.println(response);
