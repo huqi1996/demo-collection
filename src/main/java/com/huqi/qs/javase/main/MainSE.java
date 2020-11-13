@@ -1,18 +1,28 @@
 package com.huqi.qs.javase.main;
 
+import cn.hutool.system.UserInfo;
 import com.alibaba.fastjson.JSONObject;
 import com.huqi.qs.java8.bean.Apple;
 import com.huqi.qs.java8.bean.Person;
 import com.huqi.qs.javase.util.ListUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.xmlbeans.impl.validator.ValidatorUtil;
+import org.elasticsearch.common.netty.util.internal.ExecutorUtil;
+import org.springframework.transaction.TransactionStatus;
 
+import javax.management.RuntimeErrorException;
+import java.io.BufferedReader;
+import java.io.File;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.sql.Timestamp;
 import java.time.*;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
@@ -184,6 +194,192 @@ public class MainSE {
         }
         System.out.println(sb);
         System.out.println(m.replaceAll("c++"));
+
+        Runtime runtime = Runtime.getRuntime();
+        try {
+            Process process = runtime.exec("java -version");
+            BufferedReader stdoutReader = new BufferedReader(new InputStreamReader(process.getInputStream()));
+            BufferedReader stderrReader = new BufferedReader(new InputStreamReader(process.getErrorStream()));
+            String line;
+            System.out.println("OUTPUT");
+            while ((line = stdoutReader.readLine()) != null) {
+                System.out.println(line);
+            }
+            System.out.println("ERROR");
+            while ((line = stderrReader.readLine()) != null) {
+                System.out.println(line);
+            }
+            int exitVal = process.waitFor();
+            System.out.println("process exit value is " + exitVal);
+        } catch (IOException | InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        try {
+            Process process = Runtime.getRuntime().exec(new String[]{"java", "-version"});
+            try (BufferedReader br = new BufferedReader(new InputStreamReader(process.getInputStream()))) {
+                String line;
+                while ((line = br.readLine()) != null) {
+                    System.out.println("RuntimeProcess Printed: " + line);
+                }
+            }
+
+        } catch (IOException e) {
+            System.out.println("ERROR: " + e);
+        }
+
+        StringBuilder builder1 = new StringBuilder();
+        System.out.println(builder1.toString() + "aaa");
+
+        String str002 = "/printFormValueByPrintTemplate?printUrl=";
+        System.out.println(str002.substring(0, str002.indexOf("?") + 1));
+        System.out.println(str002.substring(str002.indexOf("?") + 1));
+
+        List<String> list003 = new ArrayList<>();
+        for (String s : list003) {
+            System.out.println(s);
+        }
+        list003.forEach(s -> System.out.println(s));
+        testSwitch(2);
+
+        System.out.println("aaaa".lastIndexOf("bbb"));
+        String str003 = "aaa&formPrintName=111222";
+        System.out.println(str003.lastIndexOf("formPrintName"));
+        System.out.println(str003.substring(str003.lastIndexOf("formPrintName") + "formPrintName".length() + 1));
+
+        StringBuilder builder001 = new StringBuilder();
+        System.out.println(builder001.toString().equals(""));
+        System.out.println(builder001.toString().length());
+
+        System.out.println(Runtime.getRuntime().maxMemory());
+        System.out.println(Runtime.getRuntime().maxMemory() / (1024 * 1024 * 1024.0));
+
+        Byte byte001 = 1;
+        Map<String, Object> map003 = new HashMap<>();
+        map003.put("a", byte001);
+        Byte byte002 = 1;
+        System.out.println(byte002 == map003.get("a"));
+        System.out.println(map003.remove("a"));
+        System.out.println(map003.remove("bb"));
+
+        String str004 = "/localFlowListener/officeauto";
+        System.out.println(str004.substring(str004.lastIndexOf("/")));
+
+        str004 = null;
+        System.out.println(str004 instanceof Object);
+
+        // 最小2进制，最大36进制
+        System.out.println(Long.parseLong("11", Character.MAX_RADIX));
+
+        map003.put("a", 1);
+        for (Map.Entry<String, Object> entry : map003.entrySet()) {
+            System.out.println(entry.getKey() + " : " + entry.getValue());
+        }
+        map003.forEach((key, value) -> System.out.println(key + " - " + value));
+
+        Thread thread001 = new Thread(() -> {
+            System.out.println(Thread.currentThread().getName() + " start");
+            try {
+                Thread.sleep(1000000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            System.out.println(Thread.currentThread().getName() + " end");
+        }, "001");
+        thread001.start();
+        try {
+            Thread.sleep(100);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        Thread thread002 = new Thread(() -> {
+            System.out.println(Thread.currentThread().getName() + " start");
+            try {
+                thread001.join();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            System.out.println(Thread.currentThread().getName() + " end");
+        }, "002");
+        thread002.start();
+        try {
+            Thread.sleep(100);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        // interrupt会结束join等待
+        //thread001.interrupt();
+
+        Lock lock001 = new ReentrantLock(true);
+        Thread thread003 = new Thread(() -> {
+            System.out.println(Thread.currentThread().getName() + " start");
+            lock001.lock();
+            try {
+                Thread.sleep(1000000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            lock001.unlock();
+            System.out.println(Thread.currentThread().getName() + " end");
+        }, "003");
+        thread003.start();
+        try {
+            Thread.sleep(100);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        Thread thread004 = new Thread(() -> {
+            System.out.println(Thread.currentThread().getName() + " start");
+            lock001.lock();
+            try {
+                Thread.sleep(100);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            lock001.unlock();
+            System.out.println(Thread.currentThread().getName() + " end");
+        }, "004");
+        thread004.start();
+
+        List<Apple> apples = new ArrayList<>();
+        apples.add(new Apple("red", 1.1));
+        apples.add(new Apple("green", null));
+        apples.add(new Apple("yellew", 1.2));
+        Map<String, Double> colorToWeight = apples.stream().filter(apple -> apple.getWeight() != null).collect(Collectors.toMap(Apple::getColor, Apple::getWeight));
+        System.out.println(colorToWeight);
+
+        str001 = "aaa-bbb-ccc";
+        System.out.println(str001.contains("-"));
+        System.out.println(str001.substring(0, str001.indexOf("-")));
+
+        Apple apple002 = new Apple(null, 1.1);
+        System.out.println(apple002.toString());
+        System.out.println(apple002.getColor() == null);
+
+        String[] arr001 = new String[] {"a", "b","c"};
+        List<String> list004 = Arrays.asList(arr001);
+        System.out.println(list004);
+        // list004不能add元素
+        /*list004.add("d");
+        System.out.println(list004);*/
+
+        System.out.println(File.separator);
+    }
+
+    public static void testSwitch(int value) {
+        switch (value) {
+            case 1:
+                int result = value * 2;
+                System.out.println("testSwitch: " + value + " - " + result);
+                break;
+            case 2:
+                result = value * 3;
+                System.out.println("testSwitch: " + value + " - " + result);
+                break;
+            default:
+                result = value;
+                System.out.println("testSwitch: " + value + " - " + result);
+        }
     }
 
     static <K> K[] pickTwo(K k1, K k2, K k3) {

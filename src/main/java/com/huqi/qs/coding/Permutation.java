@@ -1,6 +1,7 @@
 package com.huqi.qs.coding;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -20,6 +21,7 @@ public class Permutation {
             fact *= i;
             factorials[i] = fact;
         }
+        System.out.println(Arrays.toString(factorials));
         //预处理
         k -= 1;
         for (int i = n - 1; i >= 0; --i) {
